@@ -4,7 +4,5 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="StudentDAO" class="app.dao.impl.StudentDAOImpl">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
+	
 </beans>
