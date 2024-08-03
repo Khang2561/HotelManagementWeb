@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kala Hotel | Danh mục phòng</title>
+
+    <!-- Bootstrap => css -->
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+
+    <!-- line icon => css -->
+    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+
+    <!-- custom => css-->
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+</head>
+
+<body>
+    <div class="wrapper">
+        <aside id="sidebar" class="expand vh-100 sticky-top">
+            <div class="d-flex">
+                <button class="toggle-btn" type="button">
+                    <i class="lni lni-grid-alt"></i>
+                </button>
+                <div class="sidebar-logo">
+                    <a th:href="@{/home}">Kala Hotel</a>
+                </div>
+            </div>
+            <ul class="sidebar-nav">
+                <!-- Lặp qua danh sách quyền hạn -->
+                <li th:each="auth : ${session.listAuths}"
+                    th:if="${auth.authorizationId == session.user.authorizationID}">
+                    
+                    <a th:if="${auth.roomCategoryScreen == 1}" th:href="@{/room-category}" class="sidebar-link active">
+                        <i class="lni lni-tab"></i>
+                        <span>Danh mục phòng</span>
+                    </a>
+                    <a th:if="${auth.billForRentScreen == 1}" th:href="@{/bill-for-rent}" class="sidebar-link">
+                        <i class="lni lni-agenda"></i>
+                        <span>Phiếu thuê phòng</span>
+                    </a>
+                    <a th:if="${auth.searchScreen == 1}" th:href="@{/search}" class="sidebar-link">
+                        <i class="lni lni-search-alt"></i>
+                        <span>Tra cứu phòng</span>
+                    </a>
+                    <a th:if="${auth.recieptScreen == 1}" th:href="@{/reciept}" class="sidebar-link">
+                        <i class="lni lni-postcard"></i>
+                        <span>Hóa đơn thanh toán</span>
+                    </a>
+                    <a th:if="${auth.revenueScreen == 1}" th:href="@{/revenue}" class="sidebar-link">
+                        <i class="lni lni-target-revenue"></i>
+                        <span>Báo cáo doanh thu</span>
+                    </a>
+                    <a th:if="${auth.authorizationScreen == 1}" th:href="@{/authorization}" class="sidebar-link">
+                        <i class="lni lni-users"></i>
+                        <span>Phân quyền tài khoản</span>
+                    </a>
+                    <a th:if="${auth.settingScreen == 1}" th:href="@{/setting}" class="sidebar-link">
+                        <i class="lni lni-cogs"></i>
+                        <span>Quy định</span>
+                    </a>
+                    
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <a th:href="@{/logout}" class="sidebar-link">
+                    <i class="lni lni-exit"></i>
+                    <span>Đăng xuất</span>
+                </a>
+            </div>
+        </aside>
+
+        <div class="main p-3 bg-white-1">
+            <div class="shadowCustom overflow-hidden rounded d-flex justify-content-between align-items-center mb-4 p-3 bg-white">
+                <h1 style="margin: 0;">Danh mục phòng</h1>
+                <h1 style="margin: 0;">Xin chào, <span th:text="${session.user.fullName}"></span></h1>
+            </div>
+
+            <div class="row mx-0">
+                <div id="room-category" class="h-full rounded overflow-auto shadowCustom bg-white col-8 rounded-3">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">STT</th>
+                                <th scope="col">Phòng</th>
+                                <th scope="col">Loại Phòng</th>
+                                <th scope="col">Đơn giá</th>
+                                <th scope="col">Ghi chú</th>
+                                <th scope="col">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="room, iterStat : ${listRooms}">
+                                <th scope="row" th:text="${iterStat.count}"></th>
+                                <td th:text="${room.roomName}"></td>
+                                <td th:text="${room.typeOfRoom}"></td>
+                                <td th:text="${room.priceRoom}"></td>
+                                <td class="ghi-chu" data-bs-toggle="tooltip" th:data-bs-title="${room.noteRoom}" th:text="${room.noteRoom}"></td>
+                                <td>
+                                    <button type="button" class="btn btn-info" data-bs-toggle="modal" th:data-bs-target="'#' + ${iterStat.count} + 'updateModalRoomCategory'">
+                                        <i class="lni lni-pencil-alt"></i>
+                                    </button> |
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" th:data-bs-target="'#' + ${iterStat.count} + 'deleteModalRoomCategory'">
+                                        <i class="lni lni-trash-can"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <!-- Modal Xóa -->
+                            <div class="modal fade" th:id="${iterStat.count} + 'deleteModalRoomCategory'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Xóa phòng</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Bạn có chắc chắn muốn xóa phòng <span th:text="${room.roomName}"></span>?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                            <a th:href="@{/room-category}?ACTION=DELETE&roomId=${room.roomId}" class="btn btn-danger">Xóa</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal Sửa -->
+                            <div class="modal fade" th:id="${iterStat.count} + 'updateModalRoomCategory'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Sửa phòng</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form th:action="@{/room-category}" method="get">
+                                                <input type="hidden" name="ACTION" value="UPDATE" />
+                                                <input type="hidden" name="roomId" th:value="${room.roomId}" />
+                                                <div class="mb-3">
+                                                    <label for="exampleInputPassword1" class="form-label">Tên phòng</label>
+                                                    <input type="text" required class="form-control" name="nameRoom" th:value="${room.roomName}" id="exampleInputPassword1">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="label-room-category" class="form-label">Loại phòng</label>
+                                                    <select id="label-room-category" name="typeRoom" class="form-select">
+                                                        <option th:each="typeRoom : ${listTypeRooms}" th:value="${typeRoom.typeRoomID}" th:selected="${room.typeOfRoom == typeRoom.typeRoomID}">
+                                                            <span th:text="${typeRoom.nameTypeRoom} + ' - ' + ${typeRoom.price}"></span>
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="exampleInputPassword1" class="form-label">Ghi chú</label>
+                                                    <textarea class="w-100" name="noteRoom" th:text="${room.noteRoom}"></textarea>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                                    <input type="submit" class="btn btn-info" value="Cập nhật"/>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col-1"></div>
+
+                <div class="col-3 p-0 d-flex flex-column justify-content-between mh-100">
+                    <h5 class="text-center mb-2 bg-white p-2 rounded-3 shadowCustom">Thêm phòng mới</h5>
+                    <form th:action="@{/room-category}" class="white bg- p-2 rounded-3 shadowCustom bg-white" method="get">
+                        <input type="hidden" name="ACTION" value="ADD"/>
+                        <div class="mb-3">
+                            <label for="exampleInputPassword1" class="form-label">Tên phòng</label>
+                            <input type="text" required class="form-control" name="nameRoom" id="exampleInputPassword1">
+                        </div>
+                        <div class="mb-3">
+                            <label for="label-room-category" class="form-label">Loại phòng</label>
+                            <select id="label-room-category" name="typeRoom" class="form-select">
+                                <option th:each="typeRoom : ${listTypeRooms}" th:value="${typeRoom.typeRoomID}">
+                                    <span th:text="${typeRoom.nameTypeRoom} + ' - ' + ${typeRoom.price}"></span>
+                                </option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleInputPassword1" class="form-label">Ghi chú</label>
+                            <textarea class="w-100" name="noteRoom" id="" rows="8"></textarea>
+                        </div>
+                        <input type="submit" class="btn btn-info d-block w-100" style="font-weight: bold;" value="Thêm">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script th:src="@{/assets/js/script.js}"></script>
+    <script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+</body>
+
+</html>

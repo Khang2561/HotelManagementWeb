@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kala Hotel | Phân quyền</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/project1/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/project1/assets/css/style.css">
+    
+    <!-- Line Icons CSS -->
+    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="wrapper position-relative">
+        <aside id="sidebar" class="expand vh-100 sticky-top">
+            <div class="d-flex">
+                <button class="toggle-btn" type="button">
+                    <i class="lni lni-grid-alt"></i>
+                </button>
+                <div class="sidebar-logo">
+                    <a href="/home">Kala Hotel</a>
+                </div>
+            </div>
+            <ul class="sidebar-nav">
+                <!-- Sidebar Links Here -->
+                <!-- Example: -->
+                <li class="sidebar-item">
+                    <a href="/room-category" class="sidebar-link">
+                        <i class="lni lni-tab"></i>
+                        <span>Danh mục phòng</span>
+                    </a>
+                </li>
+                <!-- Add more sidebar items based on your needs -->
+            </ul>
+            <div class="sidebar-footer">
+                <a href="/logout" class="sidebar-link">
+                    <i class="lni lni-exit"></i>
+                    <span>Đăng xuất</span>
+                </a>
+            </div>
+        </aside>
+
+        <div class="main p-3 bg-white-1">
+            <div class="shadowCustom overflow-hidden rounded d-flex justify-content-between align-items-center mb-4 p-3 bg-white">
+                <h1 style="margin: 0;">Quy định</h1>
+                <h1 style="margin: 0;">Xin chào, <span id="userFullName"></span></h1>
+            </div>
+
+            <div class="row mx-0 mb-4">
+                <div id="room-category" class="position-relative authorization-table rounded overflow-auto shadowCustom bg-white rounded-3 mb-3">
+                    <table class="table table-hover position-sticky sticky-top top-0">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nhóm quyền</th>
+                                <th scope="col">Danh mục phòng</th>
+                                <th scope="col">Lập phiếu thuê</th>
+                                <th scope="col">Tra cứu</th>
+                                <th scope="col">Lập hóa đơn</th>
+                                <th scope="col">Xem doanh thu</th>
+                                <th scope="col">Phân quyền</th>
+                                <th scope="col">Quy định</th>
+                                <th scope="col">Thao thác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="authTableBody">
+                            <!-- Auth Rows Here -->
+                            <!-- Example: -->
+                            <tr>
+                                <th scope="row">Quản lý</th>
+                                <td><img src="./img/check.png" width="20px" alt=""></td>
+                                <td><img src="./img/uncheck.png" width="20px" alt=""></td>
+                                <td><img src="./img/check.png" width="20px" alt=""></td>
+                                <td><img src="./img/uncheck.png" width="20px" alt=""></td>
+                                <td><img src="./img/check.png" width="20px" alt=""></td>
+                                <td><img src="./img/uncheck.png" width="20px" alt=""></td>
+                                <td><img src="./img/check.png" width="20px" alt=""></td>
+                                <td><button data-bs-toggle="modal" data-bs-target="#updateAuthModal" id="fix-btn" class="btn btn-info"><i class="lni lni-pencil-alt"></i></button></td>
+                            </tr>
+                            <!-- Add more rows based on your data -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row mx-0">
+                <div class="col-7 p-0" style="height: 465.99px !important;">
+                    <div id="room-category" class="position-relative authorization-table-1 rounded overflow-auto shadowCustom bg-white rounded-3 mb-3">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Họ tên</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Nhóm quyền</th>
+                                    <th scope="col">Thao thác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="userTableBody">
+                                <!-- User Rows Here -->
+                                <!-- Example: -->
+                                <tr>
+                                    <th scope="row">Nguyễn Văn A</th>
+                                    <td>nguyenvana@example.com</td>
+                                    <td>Quản lý</td>
+                                    <td><button data-bs-toggle="modal" data-bs-target="#updateUserModal" id="fix-btn" class="btn btn-info"><i class="lni lni-pencil-alt"></i></button> | <button data-bs-toggle="modal" data-bs-target="#deleteUserModal" class="btn btn-danger"><i class="lni lni-trash-can"></i></button></td>
+                                </tr>
+                                <!-- Add more rows based on your data -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="col-1"></div>
+
+                <div class="col-4 p-0 d-flex flex-column justify-content-between mh-100">
+                    <h5 class="text-center mb-2 bg-white p-2 rounded-3 shadowCustom">Thêm tài khoản</h5>
+                    <form action="/authorization" class="white bg- p-2 rounded-3 shadowCustom bg-white" method="get">
+                        <input type="hidden" name="ACTION" value="ADD_USER"/>                    
+                        <div class="mb-3">
+                            <label for="exampleInputPassword1" class="form-label">Họ và tên</label>
+                            <input type="text" class="form-control" name="fullName" id="exampleInputPassword1" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="exampleInputPassword1" class="form-label">Email</label>
+                            <input type="email" class="form-control" name="userName" id="exampleInputPassword1" required>
+                            <small class="text-danger" id="errorMessage"></small>
+                        </div>
+
+                        <div class="mb-3 position-relative">
+                            <label for="exampleInputPassword1" class="form-label">Mật khẩu</label>
+                            <input type="password" class="form-control" name="password" id="passwordLogin" required>
+                            <i class="fa-solid fa-eye position-absolute" id="eye"></i>
+                            <i class="fa-solid fa-eye-slash position-absolute" id="eyeSlash"></i>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="label-room-category" class="form-label">Nhóm quyền</label>
+                            <select id="label-room-category" name="roleId" class="form-select" aria-label="Default select example">
+                                <!-- Options here -->
+                                <option value="PHANQUYEN1">Siêu quản trị</option>
+                                <option value="PHANQUYEN2">Giám đốc</option>
+                                <option value="PHANQUYEN3">Quản lý</option>
+                                <option value="PHANQUYEN4">Nhân viên</option>
+                            </select>
+                        </div>
+
+                        <input type="submit" class="btn btn-info d-block w-100" style="font-weight: bold;" value="Thêm tài khoản">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="/project1/assets/js/script.js"></script>
+    <script src="/project1/assets/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // JavaScript for eye icon functionality
+    var eye = document.getElementById("eye");
+    var eyeSlash = document.getElementById("eyeSlash");
+    var passwordLogin = document.getElementById("passwordLogin");
+
+    eyeSlash.addEventListener("click", () => {
+        eyeSlash.style.display = "none";
+        eye.style.display = "block";
+        passwordLogin.type = "text";
+    });
+
+    eye.addEventListener("click", () => {
+        eye.style.display = "none";
+        eyeSlash.style.display = "block";
+        passwordLogin.type = "password";
+    });
+    </script>
+</body>
+</html>
